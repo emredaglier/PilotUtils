@@ -1,21 +1,34 @@
 import os
 import gzip
+from datetime import datetime
+import json
 
 try:
     import requests
 except ModuleNotFoundError:
-    raise Exception('Please ensure that you\'ve activated the venv!\n\nRun \".venv\Scripts\\activate\" on Windows. Then run \"python app.py\"')
+    raise Exception(
+        'Please ensure that you\'ve activated the venv!\n\nRun \".venv\Scripts\\activate\" on Windows. Then run \"python app.py\"')
 
 # Data will be stored in /data
-from utils.path import *
+from utils.vars import *
 
+version_data = json_to_local()
 
 def is_data_exist():
     if os.path.isfile(file_path_xml_metar) and os.path.isfile(file_path_xml_taf) and os.path.isfile(
             file_path_json_stations):
+        json_to_local()
+
         return True
 
     return False
+
+
+def load_version(data):
+    now = datetime.now()
+    version_data['date'] = now.strftime("%d/%m/%Y %H:%M:%S")
+    with open(version, 'w') as file:
+        json.dump(data, file)
 
 
 class GetData:
@@ -66,3 +79,4 @@ class GetData:
         self.get_metar()
         self.get_taf()
         self.get_stations()
+        load_version(version_data)

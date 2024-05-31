@@ -1,4 +1,5 @@
 import os
+import json
 
 current_directory = os.path.dirname(os.path.realpath(__file__))
 file_path_gz_metar = os.path.join(current_directory, 'data\data_metar.gz')
@@ -11,3 +12,8 @@ file_path_gz_taf = os.path.join(current_directory, 'data\data_taf.gz')
 file_path_xml_taf = os.path.join(current_directory, 'data\data_taf.xml')
 
 data_folder = os.path.join(current_directory, 'data')
+version = os.path.join(current_directory, 'data\\version.json')
+
+def json_to_local():
+    with open(version, 'r') as file:
+        return json.load(file)
